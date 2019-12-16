@@ -4,8 +4,7 @@ FILE *saida;
 
 typedef struct indice{
     int posicao;
-    long int valor;
-    int resultado;
+    int valor;
 }indice;
 
 int comparador(const void *a, const void *b){
@@ -14,10 +13,6 @@ int comparador(const void *a, const void *b){
 
 int comparadorValor(const void *a, const void *b){
     return (*(indice*)a).valor - (*(indice*)b).valor;
-}
-
-int comparadorIndice(const void *a, const void *b){
-    return (*(indice*)a).posicao - (*(indice*)b).posicao;
 }
 
 int buscaBinaria(int a[], int inicio, int fim, int valor){
@@ -41,32 +36,39 @@ int main(){
     saida = fopen("Lista 1/Outputs/Output 600", "w");
     int n, m;
     scanf("%d %d", &n, &m);
-    int i, a[n], b[m];
- 
+    int i, a[n];
+
     for(i = 0; i < n; i++){
         scanf("%d", &a[i]);
     }
+
+    indice b[m];
+
     for(i = 0; i < m; i++){
-        scanf("%d", &b[i]);
+        b[i].posicao = i;
+        scanf("%d", &b[i].valor);
     }
     
     qsort(a, n, sizeof(int), comparador);
- 
-    int j, resultado = 0;
- 
+    qsort(b, m, sizeof(indice), comparadorValor);
+
+    int j = 0, resultado[m];
+
     for(i = 0; i < m; i++){
-        resultado = buscaBinaria(a, 0, n, b[i]);
-        while(resultado < n && a[resultado] <= b[i]){
-            resultado++;
+        while(j < n && a[j] <= b[i].valor){
+            j++;
         }
- 
-        printf("%d", resultado);
- 
+        resultado[b[i].posicao] = j;
+    }
+
+    for(i = 0; i < m; i++){
+        imprima1("%d", resultado[i]);
+
         if(i == m - 1){
-            printf("\n");
+            imprima("\n");
         }
         else{
-            printf(" ");
+            imprima(" ");
         }
     }
     
