@@ -25,10 +25,10 @@ int buscaBinaria(int a[], int inicio, int fim, int valor){
     if(inicio == fim){
         return inicio;
     }
+    if(inicio == i){
+        return i;
+    }
     if(a[i] == valor){
-        while(a[i + 1] == valor){
-            i++;
-        }
         return i;
     }
     if(a[i] < valor){
@@ -41,44 +41,34 @@ int main(){
     saida = fopen("Lista 1/Outputs/Output 600", "w");
     int n, m;
     scanf("%d %d", &n, &m);
-    int i;
-    long int a[n];
-
+    int i, a[n], b[m];
+ 
     for(i = 0; i < n; i++){
-        scanf("%ld", &a[i]);
+        scanf("%d", &a[i]);
     }
-
-    indice b[m];
-
     for(i = 0; i < m; i++){
-        b[i].posicao = i;
-        scanf("%ld", &b[i].valor);
+        scanf("%d", &b[i]);
     }
     
     qsort(a, n, sizeof(int), comparador);
-    qsort(b, m, sizeof(indice), comparadorValor);
-
-    int j = 0;
-
+ 
+    int j, resultado = 0;
+ 
     for(i = 0; i < m; i++){
-        while(a[j] <= b[i].valor){
-            j++;
+        resultado = buscaBinaria(a, 0, n, b[i]);
+        while(resultado < n && a[resultado] <= b[i]){
+            resultado++;
         }
-        b[i].resultado = j;
-    }
-
-    qsort(b, m, sizeof(indice), comparadorIndice);
-
-    for(i = 0; i < m; i++){
-        imprima1("%d", b[i].resultado);
-
+ 
+        printf("%d", resultado);
+ 
         if(i == m - 1){
-            imprima("\n");
+            printf("\n");
         }
         else{
-            imprima(" ");
+            printf(" ");
         }
-    }    
+    }
     
     fflush(saida);
     free(saida);
