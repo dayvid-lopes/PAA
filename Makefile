@@ -1,14 +1,22 @@
 #Para escrever comentários ##
 ############################# Makefile ##########################
 
+600: compilar_600 run_600
+
 884: compilar_884 run_884
 
 #Regras de compilação
+
+compilar_600:
+	gcc -o executavel Lista\ 1/600\ -\ Queries\ about\ less\ or\ equal\ elements.c
 
 compilar_884:
 	gcc -o executavel Lista\ 1/884\ -\ Japanese\ Crosswords\ Strike\ Back.c
 
 #Regras de execução
+
+run_600:
+	cat Lista\ 1/Inputs/Input\ 600 | ./executavel && rm executavel
 
 run_884:
 	cat Lista\ 1/Inputs/Input\ 884 | ./executavel && rm executavel
