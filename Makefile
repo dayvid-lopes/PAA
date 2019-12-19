@@ -5,6 +5,8 @@
 
 884: compilar_884 run_884
 
+1088: compilar_1088 run_1088
+
 #Regras de compilação
 
 compilar_600:
@@ -13,6 +15,9 @@ compilar_600:
 compilar_884:
 	gcc -o executavel Lista\ 1/884\ -\ Japanese\ Crosswords\ Strike\ Back.c
 
+compilar_1088:
+	gcc -o executavel Lista\ 1/Bolhas\ e\ Baldes\ -\ URI\ 1088.c
+
 #Regras de execução
 
 run_600:
@@ -20,6 +25,9 @@ run_600:
 
 run_884:
 	cat Lista\ 1/Inputs/Input\ 884 | ./executavel && rm executavel
+
+run_1088:
+	cat Lista\ 1/Inputs/Input\ 1088 | ./executavel && rm executavel
 
 # main: main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
 # 			gcc -o main main.o Controle.o Data.o Filas.o HRRN.o Loterry.o 1-Loterry.o Multilevel_Feedback.o Processos.o Round-robins.o
