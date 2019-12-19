@@ -32,33 +32,79 @@ int buscaBinaria(int a[], int inicio, int fim, int valor){
     return buscaBinaria(a, inicio, i - 1, valor);
 }
 
+void merge(indice a[], int inicio, int meio, int fim){
+    int inicio1 = inicio, inicio2 = meio + 1, inicio_aux = 0, tamanho = fim - inicio + 1;
+    indice *vet_aux;
+    vet_aux = MALLOC(indice, tamanho);
+    while(inicio1 <= meio && inicio2 <= fim){
+        if(a[inicio1].valor < a[inicio2].valor){
+            vet_aux[inicio_aux] = a[inicio1];
+            inicio1++;
+        }
+        else {
+            vet_aux[inicio_aux] = a[inicio2];
+            inicio2++;
+        }
+        inicio_aux++;
+    }
+
+    while(inicio1 <= meio){
+        vet_aux[inicio_aux] = a[inicio1];
+        inicio_aux++;
+        inicio1++;
+    }
+
+    while(inicio2 <= fim){
+        vet_aux[inicio_aux] = a[inicio2];
+        inicio_aux++;
+        inicio2++;
+    }
+
+    for(inicio_aux = inicio; inicio_aux <= fim; inicio_aux++){
+        a[inicio_aux] = vet_aux[inicio_aux - inicio];
+    }
+    free(vet_aux);
+}
+
+void mergeSort(indice a[], int inicio, int fim){
+    if(inicio < fim){
+        int meio = (fim + inicio) / 2;
+        mergeSort(a, inicio, meio);
+        mergeSort(a, meio + 1, fim);
+        merge(a, inicio, meio, fim);
+    }
+}
+
 int main(){
     saida = fopen("Lista 1/Outputs/Output 600", "w");
     int n, m;
     scanf("%d %d", &n, &m);
-    int i, a[n];
+    int i;
+    indice a[n + m];
 
     for(i = 0; i < n; i++){
-        scanf("%d", &a[i]);
+        a[m + i].posicao = -1;
+        scanf("%d", &a[m + i].valor);
     }
 
-    indice b[m];
-
     for(i = 0; i < m; i++){
-        b[i].posicao = i;
-        scanf("%d", &b[i].valor);
+        a[i].posicao = i;
+        scanf("%d", &a[i].valor);
     }
     
-    qsort(a, n, sizeof(int), comparador);
-    qsort(b, m, sizeof(indice), comparadorValor);
+    mergeSort(a, 0, n + m - 1);
 
-    int j = 0, resultado[m];
+    int j = 0, resultado[m], cont = 0;
 
     for(i = 0; i < m; i++){
-        while(j < n && a[j] <= b[i].valor){
+        while(j < n + m && a[j].posicao == -1){
+            j++;
+            cont++;
+        }
+        if(j < n + m){
+            resultado[a[j].posicao] = cont;
             j++;
         }
-        resultado[b[i].posicao] = j;
     }
 
     for(i = 0; i < m; i++){
