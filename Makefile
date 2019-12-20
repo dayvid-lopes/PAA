@@ -1,6 +1,8 @@
 #Para escrever comentários ##
 ############################# Makefile ##########################
 
+126: compilar_126 run_126
+
 600: compilar_600 run_600
 
 884: compilar_884 run_884
@@ -8,6 +10,9 @@
 1088: compilar_1088 run_1088
 
 #Regras de compilação
+
+compilar_126:
+	gcc -o executavel Lista\ 1/126\ -\ Password.c
 
 compilar_600:
 	gcc -o executavel Lista\ 1/600\ -\ Queries\ about\ less\ or\ equal\ elements.c
@@ -19,6 +24,9 @@ compilar_1088:
 	gcc -o executavel Lista\ 1/Bolhas\ e\ Baldes\ -\ URI\ 1088.c
 
 #Regras de execução
+
+run_126:
+	cat Lista\ 1/Inputs/Input\ 126 | ./executavel && rm executavel
 
 run_600:
 	cat Lista\ 1/Inputs/Input\ 600 | ./executavel && rm executavel
