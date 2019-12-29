@@ -63,18 +63,27 @@ int main(){
     int tamanho_s;
     tamanho_s = strlen(s);
     int tamanho_palavra_chave[tamanho_s], tamanho_min, indice_tamanho_palavra_chave = -1;
-    tamanho_min = -1;
+    tamanho_min = 0;
 
+    // tamanho_palavra_chave[indice_tamanho_palavra_chave] = verificarPalavraChave(s, 0, tamanho_min);
+    // if(indice_tamanho_palavra_chave < tamanho_s - 2 && tamanho_palavra_chave[indice_tamanho_palavra_chave] > 0){
+    //     indice_tamanho_palavra_chave++;
+    // }
     do{
-        tamanho_min++;
         indice_tamanho_palavra_chave++;
         tamanho_palavra_chave[indice_tamanho_palavra_chave] = verificarPalavraChave(s, 0, tamanho_min);
+        if(tamanho_min == tamanho_palavra_chave[indice_tamanho_palavra_chave]){
+            tamanho_min++;
+        }
+        else{
+            tamanho_min = tamanho_palavra_chave[indice_tamanho_palavra_chave];
+        }
     }while(indice_tamanho_palavra_chave < tamanho_s - 2 && tamanho_palavra_chave[indice_tamanho_palavra_chave] > 0);
 
     if(indice_tamanho_palavra_chave > 0){
         int i, tamanho_aux = tamanho_s - 2, resultado = -1, indice_maximo = indice_tamanho_palavra_chave, resultado_anterior = -1;
         indice_tamanho_palavra_chave = 0;
-        char t[tamanho_palavra_chave[indice_maximo - 1]], t_anterior[tamanho_palavra_chave[indice_maximo - 1]], aux[tamanho_aux + 1];
+        char t[tamanho_s - 2], t_anterior[tamanho_s - 2], aux[tamanho_aux + 1];
  
         for(i = 1; i < tamanho_s - 1; i++){
             aux[i - 1] = s[i];
