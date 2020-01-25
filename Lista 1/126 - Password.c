@@ -20,18 +20,40 @@ int verificarPalavraChave(char s[], int i, int tamanho_minimo){
     retorno = verificarPalavraChave(s, i + 1, tamanho_minimo);
     return retorno;
 }
- 
+
+int verificarPalavraChaveMaxima(char s[], int i, int final){
+    int retorno;
+    if(i < 0){
+        return -1;
+    }
+    if(s[i] == s[final] && 0 <= i){
+        int j;
+        for(j = 0; j < i; j++){
+            if(s[j] != s[final - i + j]){
+                retorno = verificarPalavraChaveMaxima(s, i - 1, final);
+                return retorno;
+            }
+        }
+        return i + 1;
+    }
+    retorno = verificarPalavraChaveMaxima(s, i - 1, final);
+    return retorno;
+}
+
 void calcularNext(char p[], int tamanho_p, int next[]){
     int i, j;
     next[0] = -1;
     next[1] = 0;
+    imprima("-1, 0");
     for(i = 2; i < tamanho_p; i++){
         j = next[i - 1] + 1;
         while(j > 0 && p[i - 1] != p[j - 1]){
             j = next[j - 1] + 1;
         }
         next[i] = j;
+        imprima1(", %d", j);
     }
+    imprima("\n");
 }
  
 int KMP(char t[], int tamanho_t, char p[], int tamanho_p){
@@ -61,56 +83,48 @@ int main(){
     char s[1000002];
     scanf("%s", s);
     int tamanho_s;
+    printf("%s\n", s);
     tamanho_s = strlen(s);
-    int tamanho_palavra_chave[tamanho_s], tamanho_min, indice_tamanho_palavra_chave = -1;
-    tamanho_min = 0;
+    int tamanho_palavra_chave[tamanho_s], tamanho_maximo, indice_tamanho_palavra_chave = 0;
+    tamanho_maximo = tamanho_s - 2;
 
-    // tamanho_palavra_chave[indice_tamanho_palavra_chave] = verificarPalavraChave(s, 0, tamanho_min);
-    // if(indice_tamanho_palavra_chave < tamanho_s - 2 && tamanho_palavra_chave[indice_tamanho_palavra_chave] > 0){
-    //     indice_tamanho_palavra_chave++;
-    // }
-    do{
-        indice_tamanho_palavra_chave++;
-        tamanho_palavra_chave[indice_tamanho_palavra_chave] = verificarPalavraChave(s, 0, tamanho_min);
-        if(tamanho_min == tamanho_palavra_chave[indice_tamanho_palavra_chave]){
-            tamanho_min++;
-        }
-        else{
-            tamanho_min = tamanho_palavra_chave[indice_tamanho_palavra_chave];
-        }
-    }while(indice_tamanho_palavra_chave < tamanho_s - 2 && tamanho_palavra_chave[indice_tamanho_palavra_chave] > 0);
+    tamanho_palavra_chave[indice_tamanho_palavra_chave] = verificarPalavraChaveMaxima(s, tamanho_maximo, tamanho_s - 1);
+    printf("tamanho palavra chave: %d\ntamanho string: %d\n", tamanho_palavra_chave[0], tamanho_s);
+    if(tamanho_palavra_chave[0] > 0){
+        int i, tamanho_aux = tamanho_s - 2, resultado = -1, indice_maximo = indice_tamanho_palavra_chave;
+        char t[tamanho_palavra_chave[0]], aux[tamanho_aux + 1];
 
-    if(indice_tamanho_palavra_chave > 0){
-        int i, tamanho_aux = tamanho_s - 2, resultado = -1, indice_maximo = indice_tamanho_palavra_chave, resultado_anterior = -1;
-        indice_tamanho_palavra_chave = 0;
-        char t[tamanho_s - 2], t_anterior[tamanho_s - 2], aux[tamanho_aux + 1];
- 
         for(i = 1; i < tamanho_s - 1; i++){
             aux[i - 1] = s[i];
-            aux[i] = '\0';
         }
- 
+        aux[i - 1] = '\0';
         do{
-            strcpy(t_anterior, t);
             for(i = 0; i < tamanho_palavra_chave[indice_tamanho_palavra_chave]; i++){
                 t[i] = s[i];
-                t[i + 1] = '\0';
             }
-            resultado_anterior = resultado;
+            t[i] = '\0';
             resultado = KMP(aux, tamanho_aux, t, tamanho_palavra_chave[indice_tamanho_palavra_chave]);
-            while(indice_tamanho_palavra_chave < indice_maximo && tamanho_palavra_chave[indice_tamanho_palavra_chave] == tamanho_palavra_chave[indice_tamanho_palavra_chave + 1]){
-                indice_tamanho_palavra_chave++;
+            if(tamanho_maximo == tamanho_palavra_chave[indice_tamanho_palavra_chave]){
+                tamanho_maximo--;
+            }
+            else{
+                tamanho_maximo = tamanho_palavra_chave[indice_tamanho_palavra_chave] - 2;
             }
             indice_tamanho_palavra_chave++;
-        }while(resultado != -1 && indice_tamanho_palavra_chave < indice_maximo);
-        if(indice_tamanho_palavra_chave == indice_maximo && resultado != -1){
-            strcpy(t_anterior, t);
-        }
-        printf("%s\n", (resultado == -1 && resultado_anterior == -1) ? "Just a legend" : t_anterior);
+            tamanho_palavra_chave[indice_tamanho_palavra_chave] = verificarPalavraChaveMaxima(s, tamanho_maximo, tamanho_s - 1);
+        }while(resultado == -1 && tamanho_palavra_chave[indice_tamanho_palavra_chave] > 0);
+        printf("%s\n", (resultado == -1) ? "Just a legend" : t);
     }
     else{
         printf("Just a legend\n");
     }
+    for(int i = 0; i < 100000; i++){
+        imprima("j");
+    }
+    imprima("\n");
+    // for(int i = 0; i < 1000000; i++){
+    //     imprima("a");
+    // }
     
     fflush(saida);
     free(saida);
